@@ -27,12 +27,14 @@ namespace Merchant.Account
             this.Id = id;
         }
 
-        public Account(Guid id, string email, string passwordHash, string phoneNumber)
+        public Account(Guid id, string email, string passwordHash, string phoneNumber, DateTime lastFailedLoginAttempt, int failedLoginAttemptCount)
             : this(id)
         {
             this.Email = email;
             this.PasswordHash = passwordHash;
             this.PhoneNumber = phoneNumber;
+            this.LastFailedLoginAttempt = lastFailedLoginAttempt;
+            this.FailedLoginAttemptCount = failedLoginAttemptCount;
         }
 
         public async Task Register(string email, string password, string phoneNumber, IAccountService accountService)

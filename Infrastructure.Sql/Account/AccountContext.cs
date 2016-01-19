@@ -20,6 +20,7 @@ namespace Infrastructure.Sql.Account
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccountEntity>().ToTable("Accounts");
+            modelBuilder.Entity<AccountEntity>().HasKey(a => a.Id);
         }
     }
 }

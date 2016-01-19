@@ -55,6 +55,13 @@
     <Compile Include="Account\AccountContext.cs" />
     <Compile Include="Account\AccountRepository.cs" />
     <Compile Include="Account\AccountService.cs" />
+    <Compile Include="Application\AddressEntity.cs" />
+    <Compile Include="Application\ApplicationContext.cs" />
+    <Compile Include="Application\ApplicationEntity.cs" />
+    <Compile Include="Application\ApplicationRepository.cs" />
+    <Compile Include="Application\BusinessInformationEntity.cs" />
+    <Compile Include="Application\FundingInformationEntity.cs" />
+    <Compile Include="Application\PrincipalOwnerEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

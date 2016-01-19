@@ -30,6 +30,8 @@ namespace Infrastructure.Sql.Account
             entity.Id = account.Id;
             entity.PhoneNumber = account.PhoneNumber;
             entity.PasswordHash = account.PasswordHash;
+            entity.LastFailedLoginAttempt = account.LastFailedLoginAttempt;
+            entity.FailedLoginAttemptCount = account.FailedLoginAttemptCount;
 
             await this.accountContext.SaveChangesAsync();
         }
@@ -41,7 +43,7 @@ namespace Infrastructure.Sql.Account
             {
                 return null;
             }
-            return new Merchant.Account.Account(entity.Id, entity.Email, entity.PasswordHash, entity.PhoneNumber);
+            return new Merchant.Account.Account(entity.Id, entity.Email, entity.PasswordHash, entity.PhoneNumber, entity.LastFailedLoginAttempt, entity.FailedLoginAttemptCount);
         }
     }
 }
