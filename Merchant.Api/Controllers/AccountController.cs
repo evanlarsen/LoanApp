@@ -18,7 +18,6 @@ namespace Merchant.Api.Controllers
             this.service = service;
         }
 
-        [HttpPost]
         public async Task<IHttpActionResult> Register(string email, string password, string phoneNumber)
         {
             var account = this.factory.Create();
@@ -34,15 +33,14 @@ namespace Merchant.Api.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IHttpActionResult> Login(string email, string password)
+        public async Task<IHttpActionResult> Login([FromBody]LoginInfo info)
         {
-            var account = await this.repository.Get(email);
+            var account = await this.repository.Get(info.Email);
             if (account == null)
             {
                 return BadRequest("No user found with that email.");
             }
-            var loginResponse = account.Login(password);
+            var loginResponse = account.Login(info.Password);
             await this.repository.Save(account);
 
             if (loginResponse.IsAuthenticated)
@@ -54,5 +52,10 @@ namespace Merchant.Api.Controllers
                 return BadRequest(loginResponse.Message);
             }
         }
+    }
+    public class LoginInfo
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
