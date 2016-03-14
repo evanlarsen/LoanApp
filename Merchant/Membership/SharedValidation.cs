@@ -1,9 +1,4 @@
-﻿using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Merchant.Membership
@@ -33,8 +28,9 @@ namespace Merchant.Membership
             return validationResponse;
         }
 
-        public CommonValidationResponse IsValidPassword(string password, string validationCategory)
+        public CommonValidationResponse IsValidPassword(string password)
         {
+            string validationCategory = "password";
             int minimumPasswordLength = 6;
             var validationResponse = new CommonValidationResponse();
             if (string.IsNullOrWhiteSpace(password))

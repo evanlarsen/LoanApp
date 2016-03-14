@@ -13,13 +13,6 @@ namespace Merchant.Membership
 
     public class AccountFactory : IAccountFactory
     {
-        readonly IAccountService accountService;
-
-        public AccountFactory(IAccountService accountService)
-        {
-            this.accountService = accountService;
-        }
-
         public Account Create(string email, string passwordHash, string phoneNumber)
         {
             Guid id = Guid.NewGuid();

@@ -80,7 +80,7 @@ namespace Merchant.Membership
             var commonValidationResponse = new CommonValidationResponse();
             var sharedValidation = new SharedValidation();
             var emailValidationResponse = await sharedValidation.IsValidEmailFormat(email, accountService);
-            var passwordValidationResponse = sharedValidation.IsValidPassword(password, "password");
+            var passwordValidationResponse = sharedValidation.IsValidPassword(password);
             var phoneNumberValidationResponse = IsValidPhoneNumber(phoneNumber);
 
             commonValidationResponse.JoinValidationResponses(emailValidationResponse, passwordValidationResponse, phoneNumberValidationResponse);

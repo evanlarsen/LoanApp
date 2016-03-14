@@ -45,7 +45,7 @@ namespace Merchant.Membership
                 validationResponse.AddErrorMessages(validationCategory, "The old password provided was not correct");
             }
             var sharedValidation = new SharedValidation();
-            validationResponse.JoinValidationResponses(sharedValidation.IsValidPassword(newPassword, validationCategory));
+            validationResponse.JoinValidationResponses(sharedValidation.IsValidPassword(newPassword));
 
             if (validationResponse.anyErrorMessages)
             {
