@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Merchant.Account
+namespace Merchant.Membership
 {
     public interface IAccountFactory
     {
-        Account Create();
+        Account Create(string email, string passwordHash, string phoneNumber);
     }
 
     public class AccountFactory : IAccountFactory
@@ -20,10 +20,10 @@ namespace Merchant.Account
             this.accountService = accountService;
         }
 
-        public Account Create()
+        public Account Create(string email, string passwordHash, string phoneNumber)
         {
             Guid id = Guid.NewGuid();
-            return new Account(id);
+            return new Account(id, email, passwordHash, phoneNumber, DateTime.MinValue, 0);
         }
     }
 }

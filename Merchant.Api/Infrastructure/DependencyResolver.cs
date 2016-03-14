@@ -1,57 +1,62 @@
-﻿using System;
+﻿using Ninject;
+using Ninject.Syntax;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 using System.Web.Http.Dependencies;
 
 namespace Merchant.Api.Infrastructure
 {
-    public class DependencyResolver : IDependencyResolver
+    public class NinjectDependencyScope : IDependencyScope
     {
-        readonly DiContainer container;
+        private IResolutionRoot resolver;
 
-        public DependencyResolver(DiContainer container)
+        internal NinjectDependencyScope(IResolutionRoot resolver)
         {
-            if (container == null) { throw new ArgumentNullException("container"); }
-            this.container = container;
-        }
+            Contract.Assert(resolver != null);
 
-        public IDependencyScope BeginScope()
-        {
-            return this;
+            this.resolver = resolver;
         }
 
         public void Dispose()
         {
-            // nothing to release
-            // the container does not hold references 
-            // to created types so they are garbage collected 
-            // when they go out of scope
+            IDisposable disposable = resolver as IDisposable;
+            if (disposable != null)
+                disposable.Dispose();
+
+            resolver = null;
         }
 
         public object GetService(Type serviceType)
         {
-            try
-            {
-                return this.container.Resolve(serviceType);
-            }
-            catch (TypeNotRegisteredWithContainerException)
-            {
-                return null;
-            }
+            if (resolver == null)
+                throw new ObjectDisposedException("this", "This scope has already been disposed");
+
+            return resolver.TryGet(serviceType);
         }
 
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            try
-            {
-                return this.container.ResolveAll(serviceType);
-            }
-            catch (TypeNotRegisteredWithContainerException)
-            {
-                return new object[] { };
-            }
+            if (resolver == null)
+                throw new ObjectDisposedException("this", "This scope has already been disposed");
+
+            return resolver.GetAll(serviceType);
+        }
+    }
+
+    public class NinjectDependencyResolver : NinjectDependencyScope, IDependencyResolver
+    {
+        private IKernel kernel;
+
+        public NinjectDependencyResolver(IKernel kernel)
+            : base(kernel)
+        {
+            this.kernel = kernel;
+        }
+
+        public IDependencyScope BeginScope()
+        {
+            return new NinjectDependencyScope(kernel.BeginBlock());
         }
     }
 }

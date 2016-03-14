@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Merchant.Account;
+using Merchant.Membership;
 using Infrastructure;
 using System.Threading.Tasks;
 
@@ -9,38 +9,55 @@ namespace Merchant.Test
     [TestClass]
     public class AccountFixture
     {
-        [TestMethod]
-        public void Assert_Login_Works_Properly()
+        IAccountFactory factory;
+
+        [TestInitialize]
+        public void Initialize()
         {
-            var account = new Account.Account(Guid.NewGuid());
-            var registerTask = account.Register("evan@evan.com", "password", "0987654321", new AccountServiceMock());
-            registerTask.Wait();
+            this.factory = new AccountFactory(new AccountServiceMock());
+        }
+
+        [TestMethod]
+        public void LoginWithCorrectPassword()
+        {
+            var account = this.factory.Create("evan@evan.com", "password", "0987654321");
             var loginResponse = account.Login("password");
-            Assert.IsTrue(loginResponse.IsAuthenticated, "Login Failed. Hashing might be incorrect");
+            Assert.IsTrue(loginResponse.isAuthenticated);
         }
 
         [TestMethod]
-        public void Assert_Failed_Login()
+        public void LoginWithIncorrectPassword()
         {
-            var account = new Account.Account(Guid.NewGuid());
-            var registerTask = account.Register("evan@evan.com", "password", "0987654321", new AccountServiceMock());
-            registerTask.Wait();
+            var account = this.factory.Create("evan@evan.com", "password", "0987654321");
             var loginResponse = account.Login("incorrect");
-            Assert.IsFalse(loginResponse.IsAuthenticated, "Login should have been rejected with incorrect password.");
+            Assert.IsFalse(loginResponse.isAuthenticated);
         }
 
         [TestMethod]
-        public void Assert_Delayed_Login_Works()
+        public async void LoginTooManyTimesTooQuicklyThenDelayAuthentication()
         {
-            var account = new Account.Account(Guid.NewGuid());
-            var registerTask = account.Register("evan@evan.com", "password", "0987654321", new AccountServiceMock());
-            registerTask.Wait();
-            for (var i = 0; i <= Account.Account.FailedLoginAttemptsBeforeDelay; i++)
+            var account = this.factory.Create("evan@evan.com", "password", "0987654321");
+            for (var i = 0; i <= Account.failedLoginAttemptsBeforeDelay; i++)
+            {
+                account.Login("incorrect");
+            }
+            var failResp = account.Login("password");
+            Assert.IsFalse(failResp.isAuthenticated, "When failing login too many times too quickly then the user should not be allowed to login for a period of time");
+            await Task.Delay(account.failedLoginAttemptDelay.Add(new TimeSpan(100)));
+            var passResp = account.Login("password");
+            Assert.IsTrue(passResp.isAuthenticated, "After waiting for the password attempt delay then the user should be able to login");
+        }
+
+        [TestMethod]
+        public void FailedLoginAttemptsTooManyTimes()
+        {
+            var account = this.factory.Create("evan@evan.com", "password", "0987654321");
+            for (var i = 0; i <= Account.maximumFailedLoginAttemptsBeforeAccountLocked; i++)
             {
                 account.Login("incorrect");
             }
             var resp = account.Login("password");
-            Assert.IsFalse(resp.IsAuthenticated, "Should fail even if correct password is used if they've attempted to quickly");
+            Assert.IsFalse(resp.isAuthenticated, "When failing login too many times too quickly then the user should not be allowed to login for a period of time");
         }
     }
 }

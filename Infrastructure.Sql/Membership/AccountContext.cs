@@ -6,21 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Sql.Account
+namespace Infrastructure.Sql.Membership
 {
     public class AccountContext : DbContext
     {
         public AccountContext(string connectionString)
             : base(connectionString)
         {
+
+            var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
         public DbSet<AccountEntity> Accounts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AccountEntity>().ToTable("Accounts");
-            modelBuilder.Entity<AccountEntity>().HasKey(a => a.Id);
+            var entityConfig = modelBuilder.Entity<AccountEntity>()
+                .ToTable("Accounts")
+                .HasKey(a => a.Id);
+
+                entityConfig.Property(f => f.LastFailedLoginAttempt)
+                    .HasColumnType("datetime2").HasPrecision(0);
+                    
         }
     }
 }

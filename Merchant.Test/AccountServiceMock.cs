@@ -1,15 +1,12 @@
-﻿using Merchant.Account;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Merchant.Membership;
 using System.Threading.Tasks;
+using System;
 
 namespace Merchant.Test
 {
     public class AccountServiceMock : IAccountService
     {
-        public Task<bool> IsEmailUnique(string email)
+        public Task<bool> IsEmailAlreadyTaken(string email)
         {
             return Task.Run(() => true);
         }

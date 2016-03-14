@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Infrastructure.Sql.Account
+namespace Infrastructure.Sql.Membership
 {
     public class AccountEntity
     {

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Merchant.Account
+namespace Merchant.Membership
 {
     public interface IAccountService
     {
-        Task<bool> IsEmailUnique(string email);
+        Task<bool> IsEmailAlreadyTaken(string email);
     }
 }

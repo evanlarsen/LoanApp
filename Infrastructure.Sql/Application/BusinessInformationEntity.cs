@@ -8,28 +8,42 @@ namespace Infrastructure.Sql.Application
 {
     public class BusinessInformationEntity
     {
+        public LegalNameEntity LegalName { get; set; }
+        public AddressEntity Address { get; set; }
+        public PhoneNumbersEntity PhoneNumbers { get; set; }
+        public TaxInfoEntity TaxInfo { get; set; }
+        public OnlinePresenceEntity OnlinePresence { get; set; }
+        public MortgageEntity Mortgage { get; set; }
+    }
+
+    public class LegalNameEntity
+    {
         public string Name { get; set; }
         public string DbaName { get; set; }
-        public string Address { get; set; }
-        public string Suite { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Zip { get; set; }
-        public string Phone { get; set; }
-        public string Fax { get; set; }
-        public string Mobile { get; set; }
+    }
+
+    public class TaxInfoEntity
+    {
         public string TaxId { get; set; }
-        public string BusinessStartDate { get; set; }
+        public string StartDate { get; set; }
         public string LengthOfOwnership { get; set; }
-        public string IndustryType { get; set; }
         public string LegalEntity { get; set; }
+        public string IndustryType { get; set; }
+    }
+
+    public class OnlinePresenceEntity
+    {
         public string Email { get; set; }
         public string Website { get; set; }
+    }
+
+    public class MortgageEntity
+    {
         public string Landlord { get; set; }
         public string Rent { get; set; }
         public string LeaseExpiration { get; set; }
-        public string LandlordName { get; set; }
-        public string LandlordPhone { get; set; }
-        public string LandlordFax { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
+        public string ContactFax { get; set; }
     }
 }

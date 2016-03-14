@@ -18,7 +18,6 @@ namespace Infrastructure.Sql.Application
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationEntity>().ToTable("Applications");
-            modelBuilder.Entity<AddressEntity>().ToTable("Addresses");
             modelBuilder.Entity<BusinessInformationEntity>().ToTable("Businesses");
             modelBuilder.Entity<FundingInformationEntity>().ToTable("Funding");
             modelBuilder.Entity<PrincipalOwnerEntity>().ToTable("Owners");
